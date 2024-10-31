@@ -1,4 +1,4 @@
-import jwt_decode from 'jwt-decode';
+import { decode } from 'jwt-decode';
 import { useRouter } from 'next/router';
 
 export const isAuthenticated = () => {

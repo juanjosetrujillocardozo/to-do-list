@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { useState } from 'react';
+import axios from 'axios';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -7,13 +7,9 @@ const Register = () => {
   const [error, setError] = useState('');
 
   const handleRegister = async () => {
-    if (!email || !password) {
-      setError('Email y contraseña son requeridos');
-      return;
-    }
     try {
-      await axios.post('http://localhost:3000/auth/register', { email, password });
-      alert('Usuario registrado con éxito');
+      await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`, { email, password });
+      alert('Usuario registrado');
     } catch (error) {
       setError('Error en el registro');
     }
@@ -22,9 +18,9 @@ const Register = () => {
   return (
     <div>
       <h2>Registro</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+      {error && <p>{error}</p>}
+      <input type="email" onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+      <input type="password" onChange={(e) => setPassword(e.target.value)} placeholder="Contraseña" />
       <button onClick={handleRegister}>Registrarse</button>
     </div>
   );

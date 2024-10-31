@@ -1,48 +1,37 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { isAuthenticated, checkTokenExpiration } from '../utils/auth';
-import { useRouter } from 'next/router';
+import axios from 'axios';
+
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  status: string;
+  dueDate: string;
+}
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('pending');
   const [dueDate, setDueDate] = useState('');
-  const router = useRouter();
-  const token = localStorage.getItem('token');
-
-  useEffect(() => {
-    if (!isAuthenticated()) {
-      router.push('/login');
-    } else if (!checkTokenExpiration()) {
-      router.push('/login');
-    }
-  }, []);
 
   const fetchTasks = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/tasks', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setTasks(response.data);
-    } catch (error) {
-      console.error('Error fetching tasks:', error);
-    }
+    const token = localStorage.getItem('token');
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/tasks`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setTasks(response.data);
   };
 
   const createTask = async () => {
-    if (!title || !description) return;
-    try {
-      await axios.post(
-        'http://localhost:3000/tasks',
-        { title, description, status, dueDate },
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
-      fetchTasks();
-    } catch (error) {
-      console.error('Error creating task:', error);
-    }
+    const token = localStorage.getItem('token');
+    await axios.post(
+      `${process.env.NEXT_PUBLIC_BACKEND_URL}/tasks`,
+      { title, description, status, dueDate },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    fetchTasks();
   };
 
   useEffect(() => {
@@ -51,24 +40,22 @@ const Tasks = () => {
 
   return (
     <div>
-      <h1>Mis Tareas</h1>
-      <input type="text" placeholder="Título" value={title} onChange={(e) => setTitle(e.target.value)} />
-      <input type="text" placeholder="Descripción" value={description} onChange={(e) => setDescription(e.target.value)} />
-      <select value={status} onChange={(e) => setStatus(e.target.value)}>
+      <h1>Tareas</h1>
+      <input type="text" placeholder="Título" onChange={(e) => setTitle(e.target.value)} />
+      <input type="text" placeholder="Descripción" onChange={(e) => setDescription(e.target.value)} />
+      <select onChange={(e) => setStatus(e.target.value)}>
         <option value="pending">Pendiente</option>
         <option value="in_progress">En Progreso</option>
         <option value="completed">Completada</option>
       </select>
-      <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} />
+      <input type="date" onChange={(e) => setDueDate(e.target.value)} />
       <button onClick={createTask}>Crear Tarea</button>
-
       {tasks.map((task) => (
         <div key={task.id}>
           <h3>{task.title}</h3>
           <p>{task.description}</p>
-          <p>Status: {task.status}</p>
-          <p>Fecha de Vencimiento: {task.dueDate}</p>
-          <button onClick={() => deleteTask(task.id)}>Eliminar</button>
+          <p>{task.status}</p>
+          <p>{task.dueDate}</p>
         </div>
       ))}
     </div>
