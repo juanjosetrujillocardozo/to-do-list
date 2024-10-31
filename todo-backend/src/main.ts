@@ -4,7 +4,7 @@ import * as cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(cors({ origin: 'https://tu-frontend.vercel.app' })); // URL de tu frontend en Vercel
+  app.use(cors({ origin: 'https://frontend.vercel.app' })); // URL de frontend en Vercel
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
