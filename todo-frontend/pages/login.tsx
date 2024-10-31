@@ -9,7 +9,7 @@ const Login = () => {
   const handleLogin = async () => {
     if (!email || !password) {
       setError('Email y contraseña son requeridos');
-      console.log(error); // Para depuración
+      console.log(error);
       return;
     }
     try {
@@ -19,7 +19,7 @@ const Login = () => {
       setError(''); 
     } catch (error) {
       setError('Credenciales inválidas');
-      console.log(error); // Para depuración
+      console.log(error);
     }
   };
 
