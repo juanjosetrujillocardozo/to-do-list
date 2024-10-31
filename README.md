@@ -1,5 +1,3 @@
-Gracias por señalarlo. Aquí tienes el `README.md` completo, asegurándome de cubrir cada punto del documento de requisitos:
-
 ```markdown
 # Prueba Técnica para Desarrollador Junior Fullstack - TTT
 
@@ -31,7 +29,7 @@ Este proyecto es una aplicación web de gestión de tareas (to-do list) donde lo
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tu-usuario/tu-repositorio.git
+   git clone https://github.com/juanjosetrujillocardozo/to-do-list
    cd todo-backend
    ```
 
